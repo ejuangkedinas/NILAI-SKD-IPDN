@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rekap Nilai SKD</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-100 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
+    <h1 class="text-2xl font-bold text-blue-700 mb-6 text-center">Rekap Nilai SKD</h1>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-blue-800">TWK (0-150)</label>
+        <input id="twk" type="number" max="150" min="0" class="w-full p-2 rounded border border-blue-300" oninput="updateTotal()">
+      </div>
+      <div>
+        <label class="block text-blue-800">TIU (0-175)</label>
+        <input id="tiu" type="number" max="175" min="0" class="w-full p-2 rounded border border-blue-300" oninput="updateTotal()">
+      </div>
+      <div>
+        <label class="block text-blue-800">TKP (0-225)</label>
+        <input id="tkp" type="number" max="225" min="0" class="w-full p-2 rounded border border-blue-300" oninput="updateTotal()">
+      </div>
+      <div class="text-center text-xl font-semibold text-blue-900">
+        Total Nilai: <span id="total">0</span>
+      </div>
+    </div>
+    <canvas id="skdChart" class="mt-6"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('skdChart').getContext('2d');
+    let chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['TWK', 'TIU', 'TKP'],
+        datasets: [{
+          label: 'Nilai SKD',
+          data: [0, 0, 0],
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(96, 165, 250, 0.7)',
+            'rgba(147, 197, 253, 0.7)'
+          ],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 250
+          }
+        }
+      }
+    });
+
+    function updateTotal() {
+      const twk = parseInt(document.getElementById('twk').value) || 0;
+      const tiu = parseInt(document.getElementById('tiu').value) || 0;
+      const tkp = parseInt(document.getElementById('tkp').value) || 0;
+      const total = twk + tiu + tkp;
+      document.getElementById('total').textContent = total;
+
+      chart.data.datasets[0].data = [twk, tiu, tkp];
+      chart.update();
+    }
+  </script>
+</body>
+</html>
